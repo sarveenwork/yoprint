@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Card, CardMedia, Chip, Typography, Rating, Alert } from '@mui/material';
+import { Grid, Card, CardMedia, Chip, Typography, Rating, Alert, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import '../../../css/animeDetail.css';
 import animeService, { ApiError } from '../../../api/anime/anime';
@@ -76,7 +76,7 @@ const AnimeDetail: React.FC<AnimeDetailProps> = ({ id }) => {
 
   return (
     <div>
-      <div style={{ paddingBottom: 20, textAlign: 'left' }}>
+      <div style={{ paddingBottom: 20 }}>
         <Typography 
           variant="h5" 
           component={Link}
@@ -85,6 +85,9 @@ const AnimeDetail: React.FC<AnimeDetailProps> = ({ id }) => {
             textDecoration: 'none', 
             color: 'inherit',
             cursor: 'pointer',
+            display: 'inline-block',
+            textAlign: { xs: 'center', sm: 'left' },
+            width: { xs: '100%', sm: 'auto' },
             '&:hover': {
               opacity: 0.7
             }
@@ -102,7 +105,16 @@ const AnimeDetail: React.FC<AnimeDetailProps> = ({ id }) => {
         </Alert>
       ) : animeDetail ? (
         <Grid container spacing={2}>
-          <Grid item xs={4}>
+          <Grid 
+            item 
+            xs={12} 
+            sm={12} 
+            md={4}
+            sx={{ 
+              display: 'flex',
+              justifyContent: { xs: 'center', md: 'flex-start' }
+            }}
+          >
             <Card className="card">
               <CardMedia
                 className="cardMedia"
@@ -110,23 +122,33 @@ const AnimeDetail: React.FC<AnimeDetailProps> = ({ id }) => {
               />
             </Card>
           </Grid>
-          <Grid item xs={8} style={{ textAlign: 'left' }}>
-            <Typography variant="h5" component="h2">
-              {animeDetail.title} <Chip label={animeDetail.type} color="primary" />
+          <Grid 
+            item 
+            xs={12} 
+            sm={12} 
+            md={8} 
+            sx={{ 
+              textAlign: { xs: 'center', md: 'left' },
+              paddingLeft: { xs: 0, md: 2 }
+            }}
+          >
+            <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
+              {animeDetail.title} <Chip label={animeDetail.type} color="primary" sx={{ ml: 1 }} />
             </Typography>
-            <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+            <Box sx={{ paddingTop: 2, paddingBottom: 2, display: 'flex', flexWrap: 'wrap', gap: 0.875, justifyContent: { xs: 'center', md: 'flex-start' } }}>
               {animeDetail.genres?.map((genre) => (
-                <Chip label={genre.name} style={{ marginRight: 7 }} key={genre.mal_id} />
+                <Chip label={genre.name} key={genre.mal_id} />
               ))}
-            </div>
+            </Box>
             <Rating
               name="anime-rating"
               value={animeDetail.score ? animeDetail.score / 2 : 0}
               readOnly
               precision={0.5}
+              sx={{ mb: 2 }}
             />
-            <Typography variant="h5" component="h3" style={{ paddingTop: 10, paddingBottom: 10 }}>Synopsis </Typography>
-            <Typography style={{ textAlign: 'justify' }}>{animeDetail.synopsis}</Typography>
+            <Typography variant="h5" component="h3" sx={{ paddingTop: 2, paddingBottom: 2 }}>Synopsis</Typography>
+            <Typography sx={{ textAlign: 'justify' }}>{animeDetail.synopsis}</Typography>
           </Grid>
         </Grid>
       ) : null}
